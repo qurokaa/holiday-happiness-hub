@@ -2,19 +2,17 @@
 import React, { useState, useRef } from 'react';
 import Header from '@/components/Header';
 import HeartBackground from '@/components/HeartBackground';
-import ImageUploader from '@/components/ImageUploader';
 import GradientButton from '@/components/GradientButton';
 import VideoPlayer from '@/components/VideoPlayer';
+import holidayImage from '@/assets/holiday_image.jpg';
 
 const Index = () => {
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-  const [transparency, setTransparency] = useState(100);
-  const [displayImage, setDisplayImage] = useState<string | null>(null);
+  const [displayImage, setDisplayImage] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const handleButtonClick = () => {
     // Show the revealed image
-    setDisplayImage(uploadedImage);
+    setDisplayImage(true);
     
     // Play sound
     if (audioRef.current) {
@@ -36,39 +34,36 @@ const Index = () => {
         
         <div className="max-w-6xl mx-auto grid gap-10 md:grid-cols-2 mt-8">
           <div className="flex flex-col gap-6">
-            {/* Image uploader with transparency slider */}
-            <ImageUploader 
-              onImageChange={setUploadedImage}
-              transparency={transparency}
-              onTransparencyChange={setTransparency}
-            />
-            
-            {/* Reveal button */}
-            <div className="flex justify-center">
-              <GradientButton
-                onClick={handleButtonClick}
-                className="animate-pulse"
-              >
-                Reveal Holiday Surprise
-              </GradientButton>
-            </div>
-            
-            {/* Display revealed image */}
-            {displayImage && (
-              <div className="glass-panel p-4 overflow-hidden animate-scale-in">
-                <img
-                  src={displayImage}
-                  alt="Revealed image"
-                  className="w-full h-auto rounded-lg object-contain max-h-[400px]"
+            {/* Reveal section */}
+            <div className="glass-panel p-6 w-full max-w-md mx-auto animate-scale-in">
+              <h2 className="text-2xl font-comic mb-4 text-center text-holiday-darkPink">Holiday Surprise</h2>
+              
+              {/* Preview of the image with 30% opacity */}
+              <div className="relative w-full mb-6">
+                <img 
+                  src={holidayImage} 
+                  alt="Holiday preview" 
+                  className="w-full h-auto rounded-lg object-contain max-h-[300px]"
+                  style={{ opacity: displayImage ? 1 : 0.3 }}
                 />
               </div>
-            )}
+              
+              {/* Reveal button */}
+              <div className="flex justify-center">
+                <GradientButton
+                  onClick={handleButtonClick}
+                  className="animate-pulse"
+                >
+                  Reveal Holiday Surprise
+                </GradientButton>
+              </div>
+            </div>
           </div>
           
-          {/* Video player */}
+          {/* Video player with local video */}
           <VideoPlayer 
-            src="https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4"
-            poster="https://sample-videos.com/img/Sample-jpg-image-1mb.jpg"
+            src="/src/assets/holiday_video.mp4"
+            poster={holidayImage}
             className="h-fit"
           />
         </div>

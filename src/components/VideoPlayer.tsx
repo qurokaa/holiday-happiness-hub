@@ -21,7 +21,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       if (isPlaying) {
         videoRef.current.pause();
       } else {
-        videoRef.current.play();
+        videoRef.current.play().catch(err => {
+          console.error("Video playback failed:", err);
+        });
       }
       setIsPlaying(!isPlaying);
     }
@@ -49,12 +51,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       <div className="relative group">
         <video
           ref={videoRef}
-          src={src}
-          poster={poster}
           className="w-full h-auto rounded-t-lg"
           onTimeUpdate={handleTimeUpdate}
           onEnded={() => setIsPlaying(false)}
-        />
+          poster={poster}
+        >
+          <source src={src} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
         
         <div 
           className="absolute inset-0 flex items-center justify-center cursor-pointer group-hover:bg-black/20 transition-colors"
