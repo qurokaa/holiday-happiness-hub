@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import Header from '@/components/Header';
 import HeartBackground from '@/components/HeartBackground';
@@ -8,22 +7,18 @@ import holidayImage from '@/assets/holiday_image.jpg';
 import { Slider } from "@/components/ui/slider";
 
 const Index = () => {
-  const [displayImage, setDisplayImage] = useState<boolean>(false);
-  const [imageTransparency, setImageTransparency] = useState<number>(0); // Initially at zero
-  const [messageWords, setMessageWords] = useState<string[]>([]); 
+  const [message, setMessage] = useState<string>("");
+  const [showFullImage, setShowFullImage] = useState<boolean>(false);
+  const [imageTransparency, setImageTransparency] = useState<number>(0);
   const audioRef = useRef<HTMLAudioElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   
-  const fullMessage = "привет поздравляю тебя с восемь марта".split(" ");
+  const fullMessage = "привет поздравляю тебя с восемь марта";
   
   const handleButtonClick = () => {
-    // Show the revealed image
-    setDisplayImage(true);
-    
-    // Add the next word to the message if not all words have been added
-    if (messageWords.length < fullMessage.length) {
-      setMessageWords(prev => [...prev, fullMessage[prev.length]]);
-    }
+    // Show the full message directly
+    setMessage(fullMessage);
+    setShowFullImage(true);
     
     // Play sound
     if (audioRef.current) {
@@ -33,7 +28,7 @@ const Index = () => {
       });
     }
     
-    // Scroll to the bottom to see the darkening effect
+    // Scroll to the bottom to see the celebratory image
     if (bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: 'smooth' });
     }
@@ -44,7 +39,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden pb-20">
+    <div className="min-h-screen relative overflow-x-hidden">
       {/* Animated hearts background */}
       <HeartBackground />
       
@@ -58,21 +53,22 @@ const Index = () => {
             <div className="glass-panel p-6 w-full max-w-md mx-auto animate-scale-in">
               <h2 className="text-2xl font-comic mb-4 text-center text-holiday-darkPink">чотам?</h2>
               
-              {/* Preview of the image with adjustable opacity */}
-              <div className="relative w-full mb-6">
-                <img 
-                  src={holidayImage} 
-                  alt="Holiday preview" 
-                  className="w-full h-auto rounded-lg object-contain max-h-[300px]"
-                  style={{ opacity: displayImage ? 1 : imageTransparency / 100 }}
-                />
-              </div>
+              {/* Only show image when button is clicked */}
+              {showFullImage && (
+                <div className="relative w-full mb-6">
+                  <img 
+                    src={holidayImage} 
+                    alt="Holiday preview" 
+                    className="w-full h-auto rounded-lg object-contain max-h-[300px]"
+                  />
+                </div>
+              )}
               
-              {/* Transparency slider */}
+              {/* Transparency slider - we keep it for adjusting visibility of video */}
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between items-center">
                   <label className="text-sm font-medium text-gray-700">
-                    Image Preview Transparency: {imageTransparency}%
+                    Video Preview Transparency: {imageTransparency}%
                   </label>
                 </div>
                 <Slider
@@ -105,31 +101,20 @@ const Index = () => {
             src="/src/assets/holiday_video.mp4"
             poster={holidayImage}
             className="h-fit"
+            style={{ opacity: imageTransparency / 100 }}
           />
         </div>
         
-        {/* Progressive darkening sections with message words */}
-        <div className="mt-16 relative z-10">
-          {messageWords.map((word, index) => {
-            const darkness = (index / fullMessage.length) * 0.85; // Calculate darkness level (max 85% dark)
-            return (
-              <div 
-                key={index}
-                className="py-16 text-center transition-all duration-500"
-                style={{ 
-                  backgroundColor: `rgba(0, 0, 0, ${darkness})`,
-                  color: darkness > 0.5 ? 'white' : 'black',
-                }}
-              >
-                <p className="text-4xl font-comic animate-fade-in">{word}</p>
-              </div>
-            );
-          })}
-        </div>
+        {/* Message display - now in a single row with gradient background */}
+        {message && (
+          <div className="mt-16 py-12 text-center bg-gradient-to-b from-transparent to-black min-h-[200px] flex items-center justify-center">
+            <p className="text-4xl font-comic animate-fade-in text-white">{message}</p>
+          </div>
+        )}
         
-        {/* Bottom image that shows when all words are revealed */}
-        {messageWords.length === fullMessage.length && (
-          <div className="mt-8 p-8 bg-black text-white text-center" ref={bottomRef}>
+        {/* Bottom image that shows when message is displayed */}
+        {showFullImage && (
+          <div className="mt-8 p-8 bg-black text-white text-center min-h-[500px]" ref={bottomRef}>
             <h2 className="text-3xl mb-6 font-comic">С праздником!</h2>
             <img 
               src="https://source.unsplash.com/random/800x600/?celebration,flowers" 
