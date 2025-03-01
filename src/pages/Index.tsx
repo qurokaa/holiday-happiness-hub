@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import Header from '@/components/Header';
 import HeartBackground from '@/components/HeartBackground';
@@ -10,15 +11,25 @@ const Index = () => {
   const [message, setMessage] = useState<string>("");
   const [showFullImage, setShowFullImage] = useState<boolean>(false);
   const [imageTransparency, setImageTransparency] = useState<number>(0);
+  const [wordIndex, setWordIndex] = useState<number>(-1);
   const audioRef = useRef<HTMLAudioElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   
   const fullMessage = "привет поздравляю тебя с восемь марта";
+  const messageWords = fullMessage.split(" ");
   
   const handleButtonClick = () => {
-    // Show the full message directly
-    setMessage(fullMessage);
-    setShowFullImage(true);
+    // Update word index to reveal words one at a time
+    setWordIndex(prev => {
+      const nextIndex = prev + 1;
+      if (nextIndex >= messageWords.length) return prev;
+      return nextIndex;
+    });
+    
+    // Show the image when first clicked
+    if (!showFullImage) {
+      setShowFullImage(true);
+    }
     
     // Play sound
     if (audioRef.current) {
@@ -34,12 +45,20 @@ const Index = () => {
     }
   };
 
+  // Update message when word index changes
+  useEffect(() => {
+    if (wordIndex >= 0) {
+      const displayedMessage = messageWords.slice(0, wordIndex + 1).join(" ");
+      setMessage(displayedMessage);
+    }
+  }, [wordIndex, messageWords]);
+
   const handleTransparencyChange = (value: number[]) => {
     setImageTransparency(value[0]);
   };
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden">
+    <div className="min-h-screen relative overflow-x-hidden bg-gradient-to-b from-holiday-pink to-holiday-white">
       {/* Animated hearts background */}
       <HeartBackground />
       
@@ -64,7 +83,7 @@ const Index = () => {
                 </div>
               )}
               
-              {/* Transparency slider - we keep it for adjusting visibility of video */}
+              {/* Transparency slider - for video transparency */}
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between items-center">
                   <label className="text-sm font-medium text-gray-700">
@@ -97,12 +116,13 @@ const Index = () => {
           </div>
           
           {/* Video player with local video */}
-          <VideoPlayer 
-            src="/src/assets/holiday_video.mp4"
-            poster={holidayImage}
-            className="h-fit"
-            style={{ opacity: imageTransparency / 100 }}
-          />
+          <div className="h-fit" style={{ opacity: imageTransparency / 100 }}>
+            <VideoPlayer 
+              src="/src/assets/holiday_video.mp4"
+              poster={holidayImage}
+              className="h-fit"
+            />
+          </div>
         </div>
         
         {/* Message display - now in a single row with gradient background */}
