@@ -13,7 +13,7 @@ const Index = () => {
   const [imageTransparency, setImageTransparency] = useState<number>(0);
   const [wordIndex, setWordIndex] = useState<number>(-1);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const bottomImageRef = useRef<HTMLImageElement>(null);
   
   const fullMessage = "привет поздравляю тебя с восемь марта";
   const messageWords = fullMessage.split(" ");
@@ -40,8 +40,8 @@ const Index = () => {
     }
     
     // Scroll to the bottom to see the celebratory image
-    if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (bottomImageRef.current) {
+      bottomImageRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -146,7 +146,7 @@ const Index = () => {
             src="https://images.unsplash.com/photo-1472396961693-142e6e269027" 
             alt="Celebration" 
             className="mx-auto max-w-full h-auto rounded-lg shadow-2xl animate-fade-in mb-16"
-            ref={bottomRef}
+            ref={bottomImageRef}
           />
         </div>
       </div>
