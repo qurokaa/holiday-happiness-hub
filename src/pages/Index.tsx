@@ -12,6 +12,7 @@ const Index = () => {
   const [showFullImage, setShowFullImage] = useState<boolean>(false);
   const [imageTransparency, setImageTransparency] = useState<number>(0);
   const [wordIndex, setWordIndex] = useState<number>(-1);
+  const [scrollOpacity, setScrollOpacity] = useState<number>(0);
   const audioRef = useRef<HTMLAudioElement>(null);
   const bottomImageRef = useRef<HTMLImageElement>(null);
   
@@ -38,8 +39,6 @@ const Index = () => {
         console.error("Audio playback failed:", err);
       });
     }
-    
-    // Removed the auto-scrolling functionality
   };
 
   // Update message when word index changes
@@ -50,6 +49,19 @@ const Index = () => {
     }
   }, [wordIndex, messageWords]);
 
+  // Add scroll event listener to darken background
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercentage = Math.min(scrollY / scrollHeight, 1);
+      setScrollOpacity(scrollPercentage * 0.8); // Max darkness is 80%
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handleTransparencyChange = (value: number[]) => {
     setImageTransparency(value[0]);
   };
@@ -58,6 +70,12 @@ const Index = () => {
     <div className="min-h-screen relative overflow-x-hidden bg-gradient-to-b from-holiday-pink to-holiday-white">
       {/* Animated hearts background */}
       <HeartBackground />
+      
+      {/* Darkening overlay based on scroll position */}
+      <div 
+        className="fixed inset-0 bg-black pointer-events-none transition-opacity duration-300 z-0"
+        style={{ opacity: scrollOpacity }}
+      ></div>
       
       {/* Content container */}
       <div className="container mx-auto px-4 py-8 relative z-10">
@@ -131,9 +149,11 @@ const Index = () => {
       </div>
       
       {/* Empty divs to make the page longer */}
-      <div className="h-[300px]"></div>
-      <div className="h-[300px]"></div>
-      <div className="h-[300px]"></div>
+      <div className="h-[500px]"></div>
+      <div className="h-[500px]"></div>
+      <div className="h-[500px]"></div>
+      <div className="h-[500px]"></div>
+      <div className="h-[500px]"></div>
       
       {/* Gradient section with photo at the bottom */}
       <div className="w-full bg-gradient-to-b from-transparent to-black py-16 mt-8">
