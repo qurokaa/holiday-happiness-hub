@@ -39,10 +39,7 @@ const Index = () => {
       });
     }
     
-    // Scroll to the bottom to see the celebratory image
-    if (bottomImageRef.current) {
-      bottomImageRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
+    // Removed the auto-scrolling functionality
   };
 
   // Update message when word index changes
