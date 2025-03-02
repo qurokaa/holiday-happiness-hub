@@ -13,6 +13,7 @@ const Index = () => {
   const [imageTransparency, setImageTransparency] = useState<number>(0);
   const [wordIndex, setWordIndex] = useState<number>(-1);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
   
   const fullMessage = "привет поздравляю тебя с восемь марта";
   const messageWords = fullMessage.split(" ");
@@ -36,6 +37,11 @@ const Index = () => {
       audioRef.current.play().catch(err => {
         console.error("Audio playback failed:", err);
       });
+    }
+    
+    // Scroll to the bottom to see the celebratory image
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -119,12 +125,30 @@ const Index = () => {
           </div>
         </div>
         
-        {/* Message display - now in a cleaner design without gradient */}
+        {/* Message display */}
         {message && (
           <div className="mt-16 py-12 text-center min-h-[200px] flex items-center justify-center">
             <p className="text-4xl font-comic animate-fade-in text-holiday-darkPink">{message}</p>
           </div>
         )}
+      </div>
+      
+      {/* Empty divs to make the page longer */}
+      <div className="h-[300px]"></div>
+      <div className="h-[300px]"></div>
+      <div className="h-[300px]"></div>
+      
+      {/* Gradient section with photo at the bottom */}
+      <div className="w-full bg-gradient-to-b from-transparent to-black py-16 mt-8">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-comic mb-10 text-white">С праздником!</h2>
+          <img 
+            src="https://images.unsplash.com/photo-1472396961693-142e6e269027" 
+            alt="Celebration" 
+            className="mx-auto max-w-full h-auto rounded-lg shadow-2xl animate-fade-in mb-16"
+            ref={bottomRef}
+          />
+        </div>
       </div>
       
       {/* Hidden audio element for sound effect */}
