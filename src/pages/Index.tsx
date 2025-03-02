@@ -84,7 +84,7 @@ const Index = () => {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between items-center">
                   <label className="text-sm font-medium text-gray-700">
-                    Video Preview Transparency: {imageTransparency}%
+                    празрачнасть: {imageTransparency}%
                   </label>
                 </div>
                 <Slider
@@ -95,8 +95,8 @@ const Index = () => {
                   onValueChange={handleTransparencyChange}
                 />
                 <div className="flex justify-between text-xs text-gray-500">
-                  <span>Transparent (0%)</span>
-                  <span>Visible (100%)</span>
+                  <span>нивидимка</span>
+                  <span>видимка</span>
                 </div>
               </div>
               
@@ -106,7 +106,7 @@ const Index = () => {
                   onClick={handleButtonClick}
                   className="animate-pulse"
                 >
-                  нука нука нука чо еще есть
+                  чо тут ваще есть блин??
                 </GradientButton>
               </div>
             </div>
