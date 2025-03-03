@@ -5,6 +5,7 @@ import HeartBackground from '@/components/HeartBackground';
 import GradientButton from '@/components/GradientButton';
 import VideoPlayer from '@/components/VideoPlayer';
 import holidayImage from '@/assets/holiday_image.jpg';
+import deerImage from '@/assets/deer.jpg'; // Import the new deer image
 import { Slider } from "@/components/ui/slider";
 
 const Index = () => {
@@ -155,13 +156,13 @@ const Index = () => {
       <div className="h-[500px]"></div>
       <div className="h-[500px]"></div>
       
-      {/* Gradient section with photo at the bottom */}
+      {/* Gradient section with deer photo at the bottom */}
       <div className="w-full bg-gradient-to-b from-transparent to-black py-16 mt-8">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-comic mb-10 text-white">С праздником!</h2>
           <img 
-            src="https://images.unsplash.com/photo-1472396961693-142e6e269027" 
-            alt="Celebration" 
+            src={deerImage} 
+            alt="Deer in nature" 
             className="mx-auto max-w-full h-auto rounded-lg shadow-2xl animate-fade-in mb-16"
             ref={bottomImageRef}
           />
