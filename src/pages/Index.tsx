@@ -5,7 +5,7 @@ import HeartBackground from '@/components/HeartBackground';
 import GradientButton from '@/components/GradientButton';
 import VideoPlayer from '@/components/VideoPlayer';
 import holidayImage from '@/assets/holiday_image.jpg';
-import deerImage from '@/assets/deer.jpg'; // Import the new deer image
+import deerImage from '@/assets/deer.jpg'; // Import the deer image
 import { Slider } from "@/components/ui/slider";
 
 const Index = () => {
@@ -57,6 +57,9 @@ const Index = () => {
       const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercentage = Math.min(scrollY / scrollHeight, 1);
       setScrollOpacity(scrollPercentage * 0.8); // Max darkness is 80%
+      
+      // Debug log to verify scrolling is working
+      console.log("Scrolling: ", scrollY, scrollHeight, scrollPercentage);
     };
     
     window.addEventListener('scroll', handleScroll);
@@ -156,16 +159,22 @@ const Index = () => {
       <div className="h-[500px]"></div>
       <div className="h-[500px]"></div>
       
-      {/* Gradient section with deer photo at the bottom */}
+      {/* Gradient section with deer photo at the bottom - made more prominent */}
       <div className="w-full bg-gradient-to-b from-transparent to-black py-16 mt-8">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-comic mb-10 text-white">С праздником!</h2>
-          <img 
-            src={deerImage} 
-            alt="Deer in nature" 
-            className="mx-auto max-w-full h-auto rounded-lg shadow-2xl animate-fade-in mb-16"
-            ref={bottomImageRef}
-          />
+          <div className="relative">
+            <img 
+              src={deerImage} 
+              alt="Deer in nature" 
+              className="mx-auto max-w-full h-auto rounded-lg shadow-2xl animate-fade-in mb-16"
+              ref={bottomImageRef}
+              style={{ maxHeight: '500px', objectFit: 'contain' }}
+              onError={(e) => console.error("Image failed to load:", e)}
+              onLoad={() => console.log("Deer image loaded successfully")}
+            />
+            <p className="text-white text-sm mt-2">Image is from assets/deer.jpg</p>
+          </div>
         </div>
       </div>
       
