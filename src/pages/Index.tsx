@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import Header from '@/components/Header';
 import HeartBackground from '@/components/HeartBackground';
@@ -122,7 +123,7 @@ const Index = () => {
           
           <div className="h-fit" style={{ opacity: imageTransparency / 100 }}>
             <VideoPlayer 
-              src="/src/assets/holiday_video.mp4"
+              src="./src/assets/holiday_video.mp4"
               poster={holidayImage}
               className="h-fit"
             />
