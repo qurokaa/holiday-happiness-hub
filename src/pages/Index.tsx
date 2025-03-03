@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import Header from '@/components/Header';
 import HeartBackground from '@/components/HeartBackground';
@@ -17,23 +16,20 @@ const Index = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const bottomImageRef = useRef<HTMLImageElement>(null);
   
-  const fullMessage = "привет поздравляю тебя с восемь марта";
+  const fullMessage = "привяу, я хочу паздравить самую креативную, самую добрую, самую крутую, самую понимающюю, самую лучшую, самую прикольную, самую ещкеря, самую яркую, самую вдохновляющую, самую заботливую, самую стильную, самую умную, самую талантливую, самую позитивную, самую огненную, самую невероятную, самую уникальную, самую лайк э бос, самую топувую, самую афигеную, самую ошеламительную, самую ачуменую, самую искреннюю, самую душевную, самую лучистую, самую смелую, самую решительную, самую открытую, самую мечтательную, самую тёплую, самую солнечную, самую яркую и единственную такую девушку ваще на всем свете ваще галактитки ваще мира ну прям оч крутую с восьмым марта, желаю чтобы  ты была здарова, чтобы всегда улыбалсь и была счастлива, чтобы везло тебе, ярких впечатлений, хорошего проведенного времени, чтобы деньги небыли праблемой, крутых моментов вот желаю, чтобы во всех начинаниях у тебя все получалось, чтобы рампаги тока так летели, чтобы в геншине повезло на перса, чтобы в форте топ 1 занимала, чтобы тебе нравилось то чем ты занимаешся, А ТАКЖЕ МАТИУАЦИИ И ИМПРАВИЗАЦИИ А ТАКЖЕ МИРНОГО НЕБА НАД ГОЛОВОЙ❤";
   const messageWords = fullMessage.split(" ");
   
   const handleButtonClick = () => {
-    // Update word index to reveal words one at a time
     setWordIndex(prev => {
       const nextIndex = prev + 1;
       if (nextIndex >= messageWords.length) return prev;
       return nextIndex;
     });
     
-    // Show the image when first clicked
     if (!showFullImage) {
       setShowFullImage(true);
     }
     
-    // Play sound
     if (audioRef.current) {
       audioRef.current.currentTime = 0;
       audioRef.current.play().catch(err => {
@@ -42,7 +38,6 @@ const Index = () => {
     }
   };
 
-  // Update message when word index changes
   useEffect(() => {
     if (wordIndex >= 0) {
       const displayedMessage = messageWords.slice(0, wordIndex + 1).join(" ");
@@ -50,15 +45,13 @@ const Index = () => {
     }
   }, [wordIndex, messageWords]);
 
-  // Add scroll event listener to darken background
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercentage = Math.min(scrollY / scrollHeight, 1);
-      setScrollOpacity(scrollPercentage * 0.8); // Max darkness is 80%
+      setScrollOpacity(scrollPercentage * 0.8);
       
-      // Debug log to verify scrolling is working
       console.log("Scrolling: ", scrollY, scrollHeight, scrollPercentage);
     };
     
@@ -72,26 +65,21 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative overflow-x-hidden bg-gradient-to-b from-holiday-pink to-holiday-white">
-      {/* Animated hearts background */}
       <HeartBackground />
       
-      {/* Darkening overlay based on scroll position */}
       <div 
         className="fixed inset-0 bg-black pointer-events-none transition-opacity duration-300 z-0"
         style={{ opacity: scrollOpacity }}
       ></div>
       
-      {/* Content container */}
       <div className="container mx-auto px-4 py-8 relative z-10">
         <Header />
         
         <div className="max-w-6xl mx-auto grid gap-10 md:grid-cols-2 mt-8">
           <div className="flex flex-col gap-6">
-            {/* Reveal section */}
             <div className="glass-panel p-6 w-full max-w-md mx-auto animate-scale-in">
               <h2 className="text-2xl font-comic mb-4 text-center text-holiday-darkPink">чотам?</h2>
               
-              {/* Only show image when button is clicked */}
               {showFullImage && (
                 <div className="relative w-full mb-6">
                   <img 
@@ -102,7 +90,6 @@ const Index = () => {
                 </div>
               )}
               
-              {/* Transparency slider - for video transparency */}
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between items-center">
                   <label className="text-sm font-medium text-gray-700">
@@ -122,7 +109,6 @@ const Index = () => {
                 </div>
               </div>
               
-              {/* Reveal button */}
               <div className="flex justify-center">
                 <GradientButton
                   onClick={handleButtonClick}
@@ -134,7 +120,6 @@ const Index = () => {
             </div>
           </div>
           
-          {/* Video player with local video */}
           <div className="h-fit" style={{ opacity: imageTransparency / 100 }}>
             <VideoPlayer 
               src="/src/assets/holiday_video.mp4"
@@ -144,7 +129,6 @@ const Index = () => {
           </div>
         </div>
         
-        {/* Message display */}
         {message && (
           <div className="mt-16 py-12 text-center min-h-[200px] flex items-center justify-center">
             <p className="text-4xl font-comic animate-fade-in text-holiday-darkPink">{message}</p>
@@ -152,14 +136,12 @@ const Index = () => {
         )}
       </div>
       
-      {/* Empty divs to make the page longer */}
       <div className="h-[500px]"></div>
       <div className="h-[500px]"></div>
       <div className="h-[500px]"></div>
       <div className="h-[500px]"></div>
       <div className="h-[500px]"></div>
       
-      {/* Gradient section with deer photo at the bottom - made more prominent */}
       <div className="w-full bg-gradient-to-b from-transparent to-black py-16 mt-8">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-comic mb-10 text-white">С праздником!</h2>
@@ -173,12 +155,11 @@ const Index = () => {
               onError={(e) => console.error("Image failed to load:", e)}
               onLoad={() => console.log("Deer image loaded successfully")}
             />
-            <p className="text-white text-sm mt-2">Image is from assets/deer.jpg</p>
+            <p className="text-white text-sm mt-2">минон.png</p>
           </div>
         </div>
       </div>
       
-      {/* Hidden audio element for sound effect */}
       <audio ref={audioRef} className="hidden">
         <source src="https://assets.mixkit.co/sfx/preview/mixkit-christmas-bells-ringing-2976.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
