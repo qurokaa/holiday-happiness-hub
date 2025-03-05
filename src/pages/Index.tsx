@@ -123,7 +123,7 @@ const Index = () => {
           
           <div className="h-fit" style={{ opacity: imageTransparency / 100 }}>
             <VideoPlayer 
-              src="./src/assets/holiday_video.mp4"
+              src={import.meta.env.MODE === 'development' ? "./src/assets/holiday_video.mp4" : "./assets/holiday_video.mp4"}
               poster={holidayImage}
               className="h-fit"
             />
