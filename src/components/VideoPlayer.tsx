@@ -1,5 +1,6 @@
 
 import React, { useState, useRef } from 'react';
+import { Maximize, Minimize, Volume2, VolumeX } from 'lucide-react';
 
 interface VideoPlayerProps {
   src: string;
@@ -13,8 +14,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   className = "" 
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [progress, setProgress] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   
   const togglePlay = () => {
     if (videoRef.current) {
@@ -28,6 +32,41 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setIsPlaying(!isPlaying);
     }
   };
+  
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(!isMuted);
+    }
+  };
+  
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement && containerRef.current) {
+      containerRef.current.requestFullscreen().then(() => {
+        setIsFullscreen(true);
+      }).catch(err => {
+        console.error("Fullscreen error:", err);
+      });
+    } else if (document.fullscreenElement) {
+      document.exitFullscreen().then(() => {
+        setIsFullscreen(false);
+      }).catch(err => {
+        console.error("Exit fullscreen error:", err);
+      });
+    }
+  };
+  
+  // Listen for fullscreen change events (e.g., when user presses Escape)
+  React.useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
   
   const handleTimeUpdate = () => {
     if (videoRef.current) {
@@ -47,7 +86,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
   
   return (
-    <div className={`glass-panel overflow-hidden ${className}`}>
+    <div className={`glass-panel overflow-hidden ${className}`} ref={containerRef}>
       <div className="relative group">
         <video
           ref={videoRef}
@@ -101,20 +140,25 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             )}
           </button>
           
-          <div className="text-sm text-gray-500">Holiday Video</div>
+          <div className="text-sm text-gray-500">видяо0о0о00</div>
           
-          <button 
-            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-            onClick={() => {
-              if (videoRef.current) {
-                videoRef.current.muted = !videoRef.current.muted;
-              }
-            }}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M14 5.6V20.4C14 21.1 13.1 21.5 12.6 21L8 16H5C3.9 16 3 15.1 3 14V10C3 8.9 3.9 8 5 8H8L12.6 3C13.1 2.5 14 2.9 14 3.6V5.6ZM18.4 12C18.4 10.8 17.9 9.6 17 8.9V15.1C17.9 14.4 18.4 13.2 18.4 12ZM19.5 12C19.5 13.7 18.7 15.2 17.4 16.2V17.9C19.4 16.7 20.7 14.5 20.7 12S19.4 7.3 17.4 6.1V7.8C18.7 8.8 19.5 10.3 19.5 12Z" fill="currentColor" />
-            </svg>
-          </button>
+          <div className="flex items-center space-x-2">
+            <button 
+              className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+              onClick={toggleMute}
+              aria-label={isMuted ? "Unmute" : "Mute"}
+            >
+              {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+            </button>
+            
+            <button
+              className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+              onClick={toggleFullscreen}
+              aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+            >
+              {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
+            </button>
+          </div>
         </div>
       </div>
     </div>
